@@ -5,6 +5,7 @@ const express = require('express')
 const app = express()
 const DATABASE_URL = process.env.DATABASE_URL
 const Turtle = require("./models/turtle")
+const PORT = 3000
 
 const turtlesSeed = [
     { name: "Leonardo", role: "ninja" },
@@ -44,7 +45,7 @@ app.get("/turtles",(req,res)=> {
 app.get("/seed", (req,res)=>{
     Turtle.deleteMany({},(err,turtles)=>{
         Turtle.create(turtlesSeed, (err,data)=>
-            res.redirect("/")
+            res.redirect("/turtles")
         )
     })
 })
@@ -82,4 +83,4 @@ app.get("/turtles/:id", (req,res)=> {
 
 
 // listen 
-app.listen(1337, ()=> console.log("running express server"))
+app.listen(PORT, ()=> console.log("running express server"))
