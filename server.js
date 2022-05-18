@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 const DATABASE_URL = process.env.DATABASE_URL
 const Turtle = require("./models/turtle")
-const PORT = 3000
+const PORT = process.env.PORT
 
 const turtlesSeed = [
     { name: "Leonardo", role: "ninja" },
@@ -33,6 +33,8 @@ const db = mongoose.connection;
 db.on("error", err => console.log(`error\n${err.message}`));
 db.on("connected", ()=> console.log("Mongo DB Connected"));
 db.on("disconnected", ()=> console.log("Mongo DB Disconnected"));
+
+
 
 // routes
 app.get("/turtles",(req,res)=> {
