@@ -33,40 +33,50 @@ db.on("error", err => console.log(`error\n${err.message}`));
 db.on("connected", ()=> console.log("Mongo DB Connected"));
 db.on("disconnected", ()=> console.log("Mongo DB Disconnected"));
 
-
 // routes
-app.get("/",(req,res)=> {
+app.get("/turtles",(req,res)=> {
     Turtle.find({},(err,turtles)=>{
         res.json(turtles)
     })
 })
-// induces
-//index
-app.get("/turtles", (req,res)=> res.json(turtles))
 
-//delete
-app.delete("/turtles/:id", (req,res)=>{
-    turtles.splice(req.params.index,1)
-    res.json(turtles)
-})
-// update
-app.put("/turtles/:id", (req,res)=>{
-    turtles[req.params.id] = req.body
-    res.json(turtles)
-})
-// create
-app.post("/turtles", (req,res)=> {
-    turtles.push(req.body)
-    res.json(turtles)
-})
-//show
-app.get("/turtles/:id", (req,res)=> res.json(turtles[req.params.id]))
 //seed
 app.get("/seed", (req,res)=>{
     Turtle.deleteMany({},(err,turtles)=>{
         Turtle.create(turtlesSeed, (err,data)=>
             res.redirect("/")
         )
+    })
+})
+
+
+//delete
+app.delete("/turtles/:id", (req,res)=>{
+    Turtle.findByIdAndDelete(req.params.id, (err,deletedTurtle)=>{
+        res.json(deletedTurtle)
+    })
+})
+
+// update
+app.put("/turtles/:id", (req,res)=>{
+    Turtle.findByIdAndUpdate(req.params.id,req.body,(err,updatedTurtle)=>{
+        if(err) console.log(err)
+        res.json(updatedTurtle)
+    })
+})
+
+// create
+app.post("/turtles", (req,res)=> {
+    Turtle.create(req.body, (err,createdTurtle)=>{
+        res.json(createdTurtle)
+    })
+})
+
+
+//show
+app.get("/turtles/:id", (req,res)=> {
+    Turtle.findById(req.params.id,(err,turtleFound)=>{
+        res.json(turtleFound)
     })
 })
 
